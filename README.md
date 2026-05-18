@@ -14,4 +14,4 @@ Install the required libraries and run the script:
 
 ```bash
 pip install numpy matplotlib seaborn
-python mystery_guest_solver.py
+python solver.py
