@@ -1,5 +1,7 @@
 import numpy as np
-
+import matplotlib.pyplot as plt
+import seaborn as sns
+from matplotlib.colors import ListedColormap
 N = 8
 M = 2
 L = 4
@@ -50,22 +52,14 @@ for m in range(M - 2, -1, -1):
                 value_matrix[n][m][l] = value_pass
                 policy_matrix[n][m][l] = 0
 
-
-import matplotlib.pyplot as plt
-import seaborn as sns
-from matplotlib.colors import ListedColormap
-
 def plot_policy_heatmap(policy_matrix, remaining_guesses):
     N, M, _ = policy_matrix.shape
     policy_slice = policy_matrix[:, :, remaining_guesses]
     
     colors = ["#8a0101", '#86efac'] 
     cmap = ListedColormap(colors)
-    
-    # 1. INCREASE CANVAS SIZE: Changed from (10, 8) to (14, 10)
+
     plt.figure(figsize=(14, 10))
-    
-    # 2. REDUCE FONT SIZE: Changed annot_kws size from 14 to 10 (or smaller if N/M are huge)
     ax = sns.heatmap(policy_slice, 
                      cmap=cmap, 
                      linewidths=0.5, 
@@ -87,35 +81,6 @@ def plot_policy_heatmap(policy_matrix, remaining_guesses):
     plt.tight_layout()
     plt.show()
 
-def plot_value_heatmap(value_matrix, remaining_guesses):
-    N, M, _ = value_matrix.shape
-    value_slice = value_matrix[:, :, remaining_guesses]
-    
-    # INCREASE CANVAS SIZE
-    plt.figure(figsize=(14, 10))
-    
-    # REDUCE FONT SIZE AND CHANGE FORMATTING
-    # If the float values are too long, change fmt='.1f' to fmt='.0f' to round to whole numbers
-    ax = sns.heatmap(value_slice, 
-                     cmap='viridis', 
-                     linewidths=0.5, 
-                     linecolor='white',
-                     cbar=True,             
-                     annot=True,            
-                     fmt='.1f',             
-                     annot_kws={"size": 9}) # Reduced size for decimals
-    
-    ax.set_title(f"Expected Value (Remaining Guesses: {remaining_guesses})", 
-                 fontsize=16, pad=20, weight='bold')
-    ax.set_xlabel("Cycle (M)", fontsize=14, labelpad=10)
-    ax.set_ylabel("Player (N)", fontsize=14, labelpad=10)
-    
-    # ROTATE X-LABELS
-    ax.set_xticklabels([f"Cycle {m+1}" for m in range(M)], rotation=45, ha='right')
-    ax.set_yticklabels([f"Player {n+1}" for n in range(N)], rotation=0)
-    
-    plt.tight_layout()
-    plt.show()
 
 is_optimal_always_ans = (policy_matrix[:,:,1:] == 1).all()
 print(is_optimal_always_ans)
